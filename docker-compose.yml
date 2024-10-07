@@ -1,0 +1,51 @@
+version: '3'
+services:
+  template_project:
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node-20.16.0/template_project
+    ports:
+      - '${APP_PORT:-4000}:4000'
+
+    volumes:
+      - '.:/usr/src/template_project'
+    networks:
+      - template_project
+
+  redis:
+    container_name: "redis-template_project"
+    image: 'redis:alpine'
+    command: redis-server --save 20 1
+    restart: always
+    ports:
+      - '${FORWARD_REDIS_PORT:-6379}:6379'
+    volumes:
+      - 'template_project-redis:/data'
+    networks:
+      - template_project
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      retries: 3
+      timeout: 5s
+
+  postgres:
+    image: postgres:17
+    restart: always
+    container_name: 'postgres-template_project'
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: '123456'
+      POSTGRES_DB: posts-db
+    ports:
+      - "5432:5432"
+
+
+networks:
+  template_project:
+    driver: bridge
+volumes:
+  template_project-redis:
+    driver: local
