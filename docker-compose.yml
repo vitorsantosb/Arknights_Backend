@@ -1,31 +1,31 @@
 version: '3'
 services:
-  template_project:
+  arknights_project:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     build:
       context: .
       dockerfile: Dockerfile
-    image: node-20.16.0/template_project
+    image: node-20.16.0/arknights_project
     ports:
       - '${APP_PORT:-4000}:4000'
 
     volumes:
-      - '.:/usr/src/template_project'
+      - '.:/usr/src/arknights_project'
     networks:
-      - template_project
+      - arknights_project
 
   redis:
-    container_name: "redis-template_project"
+    container_name: "redis-arknights_project"
     image: 'redis:alpine'
     command: redis-server --save 20 1
     restart: always
     ports:
       - '${FORWARD_REDIS_PORT:-6379}:6379'
     volumes:
-      - 'template_project-redis:/data'
+      - 'arknights_project-redis:/data'
     networks:
-      - template_project
+      - arknights_project
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       retries: 3
@@ -34,7 +34,7 @@ services:
   postgres:
     image: postgres:17
     restart: always
-    container_name: 'postgres-template_project'
+    container_name: 'postgres-arknights_project'
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: '123456'
@@ -44,8 +44,8 @@ services:
 
 
 networks:
-  template_project:
+  arknights_project:
     driver: bridge
 volumes:
-  template_project-redis:
+  arknights_project-redis:
     driver: local
