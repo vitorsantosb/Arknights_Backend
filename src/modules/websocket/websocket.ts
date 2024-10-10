@@ -25,7 +25,7 @@ export function SetupWebSocket(server: HttpServer) {
 		socket.on('client_connected', (data) => {
 			ApiLogMessage('[WEBSOCKET_SERVER]','Client connected:', socket.id);
 			
-		})
+		});
 		
 		socket.on('disconnect', () => {
 			ApiLogMessage('[WEBSOCKET_SERVER]','Client disconnected:', socket.id);

@@ -62,5 +62,15 @@ export const login = async (req: Request, res: Response) => {
 				}
 			})
 		}
+	}else {
+		res.status(404).send({
+			message: 'Not found',
+			statusCode: 404,
+			request: {
+				method: 'POST',
+				message: 'Not found - user not exists on database',
+				url: `${GetApiUrl()}/auth/login`
+			}
+		})
 	}
 }

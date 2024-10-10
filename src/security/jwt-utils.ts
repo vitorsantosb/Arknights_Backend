@@ -3,12 +3,18 @@ import jwt, {JwtPayload} from 'jsonwebtoken';
 import {Request, Response} from 'express';
 import GetApiUrl from '@services/url.service';
 
+const jwt_secret_token = process.env.JWT_TOKEN_SECRET;
+
+
 
 async function CreateUserAccessToken(payload: IPayload) {
+	if(!jwt_secret_token){
+		throw new Error('Missing JWT_TOKEN_SECRET');
+	}
 	return new Promise((resolve, reject) => {
 		jwt.sign(
 			payload,
-			'token_key', //change for .env var after solve problems with .env on typescript
+			jwt_secret_token, //change for .env var after solve problems with .env on typescript
 			{
 				expiresIn: '24h'
 			},
@@ -28,10 +34,12 @@ async function VerifyAuthUserAccessToken(req: Request, res: Response) {
 	if (!token) {
 		throw new Error('[JWT_GUARD] Token not found');
 	}
-	
+	if(!jwt_secret_token){
+		throw new Error('Missing JWT_TOKEN_SECRET');
+	}
 	return new Promise((resolve, reject) => {
 		try {
-			jwt.verify(token, 'token_key', (err) => {
+			jwt.verify(token, jwt_secret_token, (err) => {
 				if (err) {
 					res.status(403).send({
 						message: 'Unauthorized',
