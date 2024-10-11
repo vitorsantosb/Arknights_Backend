@@ -8,18 +8,25 @@ datasource db {
 }
 
 model User {
-  id         String        @id @default(uuid())
+  id         String    @id @default(uuid())
   name       String
-  email      String        @unique
+  email      String    @unique
   password   String
-  is_deleted Boolean       @default(false)
+  is_deleted Boolean   @default(false)
   deleted_at DateTime?
-  created_at DateTime?     @default(now())
-  updated_at DateTime?     @default(now())
-  role       String?
-  messages   ChatMessages? @relation("UserMessages")
-  sessions   Session?
-  chat_rooms ChatRooms[]   @relation("UserChatRooms")
+
+  is_verified_user Boolean? @default(false)
+  email_validate   Boolean? @default(false)
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  messages     ChatMessages[] @relation("UserMessages") // Correção aqui: relação de um para muitos
+  sessions     Session[]
+  chat_rooms   ChatRooms[]    @relation("UserChatRooms")
+  forums       Forum[]        @relation("UserForums") // Adicionada relação com Forum
+  posts        Posts[]        @relation("UserPosts") // Adicionada relação com Posts
+  postMessages PostMessages[] @relation("UserPostMessages") // Relação para PostMessages
 }
 
 model Session {
@@ -32,7 +39,8 @@ model Session {
   browser_version String
   create_at       DateTime @default(now())
   expires_at      DateTime @default(now())
-  user_id         User     @relation(fields: [id], references: [id], onDelete: Cascade)
+  user_id         String
+  user            User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model ChatRooms {
@@ -46,10 +54,57 @@ model ChatRooms {
 model ChatMessages {
   id         String    @id @default(uuid())
   room_id    String
-  user_id    String    @unique
+  user_id    String
   message    String
   created_at DateTime  @default(now())
-  update_at  DateTime  @default(now())
+  updated_at DateTime  @default(now())
   room       ChatRooms @relation("RoomMessages", fields: [room_id], references: [room_id], onDelete: Cascade)
-  user       User      @relation("UserMessages", fields: [user_id], references: [id], onDelete: Cascade)
+  user       User      @relation("UserMessages", fields: [user_id], references: [id], onDelete: Cascade) // Corrigido para um para muitos
+}
+
+model Forum {
+  id              String      @id @default(uuid())
+  owner_id        String
+  owner           User        @relation("UserForums", fields: [owner_id], references: [id])
+  forum_title     String
+  forum_tags      ForumTags[] @relation("ForumForumTags") // Adiciona a relação
+  forum_messages  Posts[]     @relation("ForumMessages")
+  forum_is_enable Boolean     @default(true)
+
+  is_deleted Boolean   @default(false)
+  deleted_at DateTime?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model ForumTags {
+  id        String  @id @default(uuid())
+  tag_name  String
+  tag_color String
+  forums    Forum[] @relation("ForumForumTags") // Adiciona a relação inversa
+}
+model Posts {
+  id                 String         @id @default(uuid())
+  forum_id           String
+  user_id            String
+  forum              Forum          @relation("ForumMessages", fields: [forum_id], references: [id])
+  user               User           @relation("UserPosts", fields: [user_id], references: [id])
+  post_title         String
+  post_message       String
+  users_post_message PostMessages[]
+
+  is_deleted Boolean   @default(false)
+  deleted_at DateTime?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model PostMessages {
+  id      String @id @default(uuid())
+  post_id String
+  user_id String
+  post    Posts  @relation(fields: [post_id], references: [id])
+  user    User   @relation("UserPostMessages", fields: [user_id], references: [id]) // Corrigido para relação
 }
