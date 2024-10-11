@@ -68,7 +68,7 @@ model Forum {
   owner           User        @relation("UserForums", fields: [owner_id], references: [id])
   forum_title     String
   forum_tags      ForumTags[] @relation("ForumForumTags") // Adiciona a relação
-  forum_messages  Posts[]     @relation("ForumMessages")
+  forum_posts     Posts[]     @relation("ForumMessages")
   forum_is_enable Boolean     @default(true)
 
   is_deleted Boolean   @default(false)
