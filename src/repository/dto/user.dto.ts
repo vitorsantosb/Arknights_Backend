@@ -1,4 +1,4 @@
-import {IUser} from './user.interface';
+import { IUser, IUserDto } from './user.interface';
 import {NormalizeEmail} from '@services/email.service';
 import {IPayload} from '@security/interfaces/jwt-interfaces';
 import {CreateId} from '@configs/uuid/GenUUID';
@@ -23,7 +23,16 @@ function CreateUserPayload(_payloadData: IPayload): IPayload {
 	}
 }
 
+function CreateSimpleUserDto(_id: string, _email: string, _name: string): IUserDto {
+	return {
+		id: _id,
+		email: _email,
+		name: _name
+	}
+}
+
 export {
 	CreateUserPayload,
-	CreateUserDto
+	CreateUserDto,
+	CreateSimpleUserDto
 }

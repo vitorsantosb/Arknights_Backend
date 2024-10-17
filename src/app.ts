@@ -3,6 +3,7 @@ import {Request, Response, NextFunction} from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
@@ -12,11 +13,12 @@ import authController from '@routes/controllers/authentication.controller';
 
 app.use(cors({
 	origin: process.env.NODE_ENV !== 'production' ? 'http://localhost:3001' : undefined,
+	credentials: true
 	//origin: ['*'],
 	//methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 	//allowedHeaders: ['Access-Control-Allow-Origin','Access-Control-Allow-Headers', 'Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
 }))
-
+app.use(cookieParser());
 app.use(morgan('dev'));
 
 app.use(bodyParser.json());

@@ -40,6 +40,14 @@ async function ExistsUserWithEmail(_email: string) {
 	})
 }
 
+async function ExistsAndGetUserWithId(_id: string) {
+	return prisma.user.findUnique({
+		where: {
+			id: _id
+		}
+	})
+}
+
 async function RegisterUserSession(_id: string, _sessionData: any) {
 
 }
@@ -49,6 +57,7 @@ export {
 	StoreUser,
 	ExistsUserWithEmail,
 	GetUser,
-	GetUserDataWithEmail
+	GetUserDataWithEmail,
+	ExistsAndGetUserWithId
 }
 

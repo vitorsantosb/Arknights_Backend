@@ -1,7 +1,8 @@
-import {IPayload} from '@security/interfaces/jwt-interfaces';
-import jwt, {JwtPayload} from 'jsonwebtoken';
-import {Request, Response} from 'express';
+import { IPayload, UserPayloadCustom  } from '@security/interfaces/jwt-interfaces';
+import jwt from 'jsonwebtoken';
+import { Request, Response } from 'express';
 import GetApiUrl from '@services/url.service';
+import { ApiLogMessage } from '@configs/logs/logMessages';
 
 const jwt_secret_token = process.env.JWT_TOKEN_SECRET;
 
@@ -29,7 +30,7 @@ async function CreateUserAccessToken(payload: IPayload) {
 }
 
 async function VerifyAuthUserAccessToken(req: Request, res: Response) {
-	const token = req.headers['authorization']?.split(' ')[1];
+	const token = req.cookies.authToken;
 	
 	if (!token) {
 		throw new Error('[JWT_GUARD] Token not found');
@@ -39,7 +40,7 @@ async function VerifyAuthUserAccessToken(req: Request, res: Response) {
 	}
 	return new Promise((resolve, reject) => {
 		try {
-			jwt.verify(token, jwt_secret_token, (err) => {
+			jwt.verify(token, jwt_secret_token, (err: any) => {
 				if (err) {
 					res.status(403).send({
 						message: 'Unauthorized',
@@ -61,8 +62,24 @@ async function VerifyAuthUserAccessToken(req: Request, res: Response) {
 	})
 }
 
+
+function DecodedUserJwtPayload(_payload: string): IPayload {
+	if(!jwt_secret_token){
+		throw new Error('Missing JWT_TOKEN_SECRET');
+	}
+	const _payloadDecoded = jwt.verify(_payload, jwt_secret_token) as UserPayloadCustom;
+	
+	return {
+		id: _payloadDecoded.id,
+		name: _payloadDecoded.name,
+		email: _payloadDecoded.email,
+	}
+}
+
+
 export {
 	CreateUserAccessToken,
-	VerifyAuthUserAccessToken
+	VerifyAuthUserAccessToken,
+	DecodedUserJwtPayload,
 }
 

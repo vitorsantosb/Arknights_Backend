@@ -39,6 +39,12 @@ export const login = async (req: Request, res: Response) => {
 				});
 				
 				const accessToken = await CreateUserAccessToken(userPayload);
+				res.cookie('authToken', accessToken, {
+					httpOnly: true,
+					sameSite: 'none',
+					secure: true,  // apenas para HTTPS em produção
+					maxAge: 3600000  // Cookie válido por 1 hora
+				});
 				
 				return res.status(200).send({
 					message: 'Successfully',
@@ -48,7 +54,6 @@ export const login = async (req: Request, res: Response) => {
 						message: 'Successfully user has been logged in',
 						url: `${GetApiUrl()}/user/login`
 					},
-					token: accessToken,
 				})
 			}
 		} else {
