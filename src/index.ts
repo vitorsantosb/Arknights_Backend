@@ -6,6 +6,7 @@ import {ConnectPrismaDb} from '@database/prisma.database';
 import {PrismaClient} from '@prisma/client';
 
 import dotenv from 'dotenv';
+import { SetupEmailMessageFiles } from "@services/email/setupEmailMessages";
 dotenv.config();
 
 async function StartHTTPServer(): Promise<void> {
@@ -26,6 +27,7 @@ async function StartHTTPServer(): Promise<void> {
 async function init() {
   try {
     await ConnectPrismaDb();
+    await SetupEmailMessageFiles();
     await StartHTTPServer();
   } catch (error) {
     console.error("Error during initialization", error);
