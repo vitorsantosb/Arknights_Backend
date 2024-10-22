@@ -19,7 +19,7 @@ export const GetUsers = async (req: Request, res: Response) => {
       const _usersList = [];
       
       for (let i = 0; i < _queryResult.length; i++) {
-        _usersList.push(CreateSimpleUserDto(_queryResult[i].id, _queryResult[i].name, _queryResult[i].email));
+        _usersList.push(CreateSimpleUserDto(_queryResult[i].id, _queryResult[i].email, _queryResult[i].name));
       }
       
       if (_usersList.length > 0) {
@@ -52,7 +52,7 @@ export const GetUsers = async (req: Request, res: Response) => {
     const _usersList = [];
     
     for (let i = 0; i < _queryResult.length; i++) {
-      _usersList.push(CreateSimpleUserDto(_queryResult[i].id, _queryResult[i].name, _queryResult[i].email));
+      _usersList.push(CreateSimpleUserDto(_queryResult[i].id, _queryResult[i].email, _queryResult[i].name));
     }
     
     if (_usersList.length > 0) {
@@ -85,7 +85,7 @@ export const GetUsers = async (req: Request, res: Response) => {
     const _usersList = [];
     
     for (let i = 0; i < _queryResult.length; i++) {
-      _usersList.push(CreateSimpleUserDto(_queryResult[i].id, _queryResult[i].name, _queryResult[i].email));
+      _usersList.push(CreateSimpleUserDto(_queryResult[i].id, _queryResult[i].email, _queryResult[i].name));
     }
     
     if(_usersList.length > 0) {
