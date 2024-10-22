@@ -3,7 +3,7 @@ import configFile from '@configs/config.json';
 import { IUserChangePassword } from '@services/email/email-interfaces';
 
 module.exports = {
-  message_type: 'CHANGE_PASSWORD',
+  message_type: 'RECOVERY_PASSWORD',
   lang: 'pt-BR',
   content: {
     title: 'Arknights API - Mudança de Senha',

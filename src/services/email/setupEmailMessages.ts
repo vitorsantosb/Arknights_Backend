@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs/promises';
 import { ApiLogMessage } from '@configs/logs/logMessages';
-import { EmailMessage } from '@services/email/email-interfaces';
+import { EmailMessage, IMessageTypes, MessageType } from '@services/email/email-interfaces';
 
 const messagesDirectoryPath = path.resolve(__dirname, '../email/messages');
 
@@ -25,17 +25,18 @@ async function SetupEmailMessageFiles(): Promise<Map<string, EmailMessage>> {
 }
 
 /**
+ * Retrieves a message object based on the provided message type.
  *
- * @param messageType
- * @returns {EmailMessage}
- * @throws {Error}
- * @constructor
+ * @template T - A key from IMessageTypes that defines the type of message.
+ * @param {T} messageType - The type of the message (inferred from IMessageTypes).
+ * @returns {EmailMessage<MessageType<T>>} - The corresponding message object.
+ * @throws {Error} If the message type is not found in the message map.
  */
-function Message(messageType: string): EmailMessage {
+function Message<T extends keyof IMessageTypes>(messageType: T): EmailMessage<MessageType<T>> {
   if (!messageMap.has(messageType)) {
     throw new Error('[MESSAGE_FILES] Message file not found');
   }
-  return messageMap.get(messageType)!;
+  return messageMap.get(messageType)! as EmailMessage<MessageType<T>>;
 }
 
 function ResolveMessages<T>(resolver: (file: EmailMessage) => T): T[] {

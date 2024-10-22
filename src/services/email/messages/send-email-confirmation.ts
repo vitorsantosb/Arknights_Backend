@@ -1,6 +1,6 @@
 import configFile from '@configs/config.json';
 import { GetDateTimeFormatted } from '@services/timestamp.service';
-import { IUserPasswordEmail } from '@services/email/email-interfaces';
+import { IUserSendPasswordOnEmail } from '@services/email/email-interfaces';
 
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
   'content': {
     'title': 'Arknights API - Senha Primária',
     'subject': 'Informações Importantes sobre sua Conta',
-    'html': (user: IUserPasswordEmail) => `
+    'html': (user: IUserSendPasswordOnEmail) => `
       <div style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
         <div style="text-align: center;">
           <img src="${configFile.assets.logo.url}" alt="arknights_api_logo" style="max-width: 350px; height: auto;">

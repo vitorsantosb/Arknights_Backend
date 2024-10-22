@@ -1,4 +1,4 @@
-export interface IUserPasswordEmail {
+export interface IUserSendPasswordOnEmail {
   username: string;
   email: string;
   password: string;
@@ -27,4 +27,11 @@ export interface EmailMessage<T = any> {
     html: (data: T) => string;
     footer: string;
   };
+}
+export type MessageType<K extends keyof IMessageTypes> = IMessageTypes[K];
+export interface IMessageTypes {
+  SEND_EMAIL_CONFIRMATION: IUserSendPasswordOnEmail;
+  USER_PASSWORD_RESET: IResetPasswordEmail;
+  RECOVERY_PASSWORD: IUserChangePassword;
+  RESET_PASSWORD_TOKEN: IUserResetPasswordToken;
 }
