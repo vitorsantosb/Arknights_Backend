@@ -15,7 +15,7 @@ export function CreateTransporter(): Transporter {
   });
 }
 
-export function ExempleTestEmail() {
+export function ExampleTestEmail() {
   const transporter = CreateTransporter();
   const _loadedMessage = Message('SEND_EMAIL_CONFIRMATION');
   
