@@ -3,7 +3,7 @@ import { DecodedUserJwtPayload} from '@security/jwt-utils';
 import { ExistsAndGetUserWithId } from '@repository/user.repository';
 import { CreateSimpleUserDto } from '@repository/dto/user.dto';
 
-export const GetUserData = async (req: Request, res: Response) => {
+export const GetUserData = async (req: Request, res: Response): Promise<Response> => {
   const _token = req.cookies.authToken;
   
   if(!_token){

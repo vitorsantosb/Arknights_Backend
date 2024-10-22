@@ -7,5 +7,6 @@ import { RouteGuard } from '@routes/middleware/RouteGuard';
 
 router.post('/register', userController.register);
 router.get('/me', RouteGuard, userController.getUserData);
+router.get('/list', RouteGuard, userController.getUsersList);
 
 export default router;

@@ -7,5 +7,8 @@ export const userController = {
   },
   getUserData: async(req: Request, res: Response) => {
     await userFunctions.GetUserData(req, res);
+  },
+  getUsersList: async(req: Request, res: Response) => {
+    await userFunctions.GetUsers(req, res);
   }
 }
